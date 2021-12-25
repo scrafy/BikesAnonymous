@@ -75,7 +75,7 @@ namespace TraversalServices.Implementations
             var font = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL);
             var bold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
             var table = new PdfPTable(1);
-            var image = new StreamReader($"{Directory.GetCurrentDirectory()}/Infraestructure/Services/Resources/logo.png");
+            var image = new StreamReader($"{Directory.GetCurrentDirectory()}/Infraestructure/Resources/logo.png");
             var logo = Image.GetInstance(image.BaseStream);
             logo.ScalePercent(15);
 

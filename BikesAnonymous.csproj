@@ -16,7 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="Infraestructure\Services\TraversalServices.csproj" />
+    <ProjectReference Include="Core\Core.csproj" />
+    <ProjectReference Include="Infraestructure\TraversalServices.csproj" />
   </ItemGroup>
 
 
