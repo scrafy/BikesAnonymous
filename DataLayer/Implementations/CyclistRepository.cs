@@ -51,6 +51,9 @@ namespace DataLayer.Implementations
             using (var stream = GetFileStream())
             {
                 var cyclists = JsonConvert.DeserializeObject<List<Cyclist>>(stream.ReadToEnd());
+                if (cyclists.Count() == 0)
+                    throw new Exception("The Cylist DB is empty, please, load some cyclists");
+
                 return cyclists.FirstOrDefault(c => c.Username == username && c.Password == password);
             }
         }
@@ -63,24 +66,17 @@ namespace DataLayer.Implementations
             using (var stream = GetFileStream())
             {
                 var cyclists = JsonConvert.DeserializeObject<List<Cyclist>>(stream.ReadToEnd());
-                if(cyclists.Count() == 0)
-                {
-                    stream.Close();
-                    await WriteData(JsonConvert.SerializeObject(entities));
-
-                }
-                else
+                if(cyclists.Count() > 0)
                 {
                     var emailList = cyclists.Select(c => c.Email);
                     var emailsRepeated = emailList.Intersect(entities.Select(c => c.Email));
                     if (emailsRepeated.Count() > 0)
                         throw new Exception($"Email address in use: {emailsRepeated.First()}");
 
-                    cyclists.AddRange(entities);
-                    stream.Close();
-                    await WriteData(JsonConvert.SerializeObject(cyclists));
-
                 }
+                cyclists.AddRange(entities);
+                stream.Close();
+                await WriteData(JsonConvert.SerializeObject(cyclists));
                 return;
 
             }
@@ -91,12 +87,16 @@ namespace DataLayer.Implementations
             using (var stream = GetFileStream())
             {
                 var cyclists = JsonConvert.DeserializeObject<List<Cyclist>>(stream.ReadToEnd());
-                var emailList = cyclists.Select(c => c.Email).ToList();
-                if (emailList.Exists(c => c == entity.Email))
-                    throw new Exception($"Email address in use: {entity.Email}");
-
+                if (cyclists.Count() > 0)
+                {
+                    var emailList = cyclists.Select(c => c.Email).ToList();
+                    if (emailList.Exists(c => c == entity.Email))
+                        throw new Exception($"Email address in use: {entity.Email}");
+                }                
+                stream.Close();
                 cyclists.Add(entity);
-                
+                await WriteData(JsonConvert.SerializeObject(cyclists));
+
             }
         }
 

@@ -2,6 +2,7 @@
 using DataLayer.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace DataLayer.Implementations
@@ -38,6 +39,31 @@ namespace DataLayer.Implementations
         public async void SaveAsync(Owner entity)
         {
             throw new NotImplementedException();
+        }
+
+        private StreamReader GetFileStream()
+        {
+            if (!File.Exists(@$"{Directory.GetCurrentDirectory()}/DataLayer/DB/Owner.json"))
+                CreateDB();
+
+            return new StreamReader(@$"{Directory.GetCurrentDirectory()}/DataLayer/DB/Owner.json");
+        }
+
+        private void CreateDB()
+        {
+            using (var writer = new StreamWriter(@$"{Directory.GetCurrentDirectory()}/DataLayer/DB/Owner.json", false))
+            {
+
+            }
+        }
+
+        private async Task WriteData(string jsonData)
+        {
+            using (var writer = new StreamWriter(@$"{Directory.GetCurrentDirectory()}/DataLayer/DB/Owner.json", false))
+            {
+                await writer.WriteAsync(jsonData);
+
+            }
         }
     }
 }
