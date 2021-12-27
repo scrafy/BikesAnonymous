@@ -1,5 +1,4 @@
 ﻿using Core.Enums;
-using Core.Exceptions;
 using System;
 
 namespace Core.Entities
