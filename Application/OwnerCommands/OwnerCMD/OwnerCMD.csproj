@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>OwnerCMD</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\DataAccess\DataLayer\DataLayer.csproj" />
+    <ProjectReference Include="..\..\..\Infraestructure\Services\TraversalServices\TraversalServices.csproj" />
+  </ItemGroup>
+
+</Project>
