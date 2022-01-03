@@ -15,4 +15,9 @@
     <ProjectReference Include="..\..\Infraestructure\Common\Helpers\Helpers.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DB\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

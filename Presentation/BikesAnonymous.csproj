@@ -20,6 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Application\CyclistCommands\CyclistCMD\CyclistCMD.csproj" />
     <ProjectReference Include="..\Application\OwnerCommands\OwnerCMD\OwnerCMD.csproj" />
     <ProjectReference Include="..\DataAccess\DataLayer\DataLayer.csproj" />
     <ProjectReference Include="..\Domain\Core\Core.csproj" />
@@ -29,7 +35,7 @@
 
 
   <ItemGroup>
-    <Compile Update="Controllers\TestController.cs">
+    <Compile Update="Controllers\OwnerController.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Program.cs">

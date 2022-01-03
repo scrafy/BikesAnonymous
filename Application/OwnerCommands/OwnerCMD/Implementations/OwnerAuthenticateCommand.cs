@@ -1,8 +1,12 @@
 ﻿using Core.Entities;
+using Core.Enums;
+using Core.Exceptions;
 using DataLayer.Interfaces;
+using Microsoft.Extensions.Options;
 using OwnerCMD.Interfaces;
-using System;
 using System.Threading.Tasks;
+using TraversalServices.Interfaces;
+using TraversalServices.Models;
 
 namespace OwnerCMD.Implementations
 {
@@ -11,14 +15,19 @@ namespace OwnerCMD.Implementations
         #region private properties
 
         private IOwnerRepository<Owner> _ownerRepository;
+        private ITraversalServicesProvider _traversalServicesProvider;
+        private IOptions<TokenSettings> _tokenSettings;
+
 
         #endregion
 
         #region constructor
 
-        public OwnerAuthenticateCommand(IOwnerRepository<Owner> ownerRepository)
+        public OwnerAuthenticateCommand(IRepositoryProvider repositoryProvider, ITraversalServicesProvider traversalServicesProvider, IOptions<TokenSettings> tokenSettings)
         {
-            _ownerRepository = ownerRepository;            
+            _ownerRepository = repositoryProvider.GetOwnerRepository();
+            _traversalServicesProvider = traversalServicesProvider;
+            _tokenSettings = tokenSettings;
         }
 
         #endregion
@@ -28,9 +37,8 @@ namespace OwnerCMD.Implementations
 
         public async Task<string> AuthenticateAsync(string username, string password)
         {
-            var owner = await _ownerRepository.GetOwnerByUsernameAndPasswordAsync(username, password) ?? throw new Exception("Owner not found");
-            return "";//generar token
-            
+            var owner = (await _ownerRepository.GetOwnerByUsernameAndPasswordAsync(username, password)) ?? throw new GenericException("Owner not found", ErrorCode.NOT_FOUND);
+            return _traversalServicesProvider.GetTokenGeneratorService().CreateToken(_tokenSettings.Value.Secret, ROLE.OWNER);
         }
 
         #endregion

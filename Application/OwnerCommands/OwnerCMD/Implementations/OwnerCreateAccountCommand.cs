@@ -15,9 +15,9 @@ namespace OwnerCMD.Implementations
 
         #region constructor
 
-        public OwnerCreateAccountCommand(IOwnerRepository<Owner> ownerRepository)
+        public OwnerCreateAccountCommand(IRepositoryProvider repositoryProvider)
         {
-            _ownerRepository = ownerRepository;            
+            _ownerRepository = repositoryProvider.GetOwnerRepository();            
         }
 
         #endregion

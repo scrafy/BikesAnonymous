@@ -55,11 +55,11 @@ namespace DataLayer.Implementations
 
             using (var stream = GetFileStream(DB.Cyclist))
             {
-                var cyclists = JsonConvert.DeserializeObject<List<Cyclist>>(stream.ReadToEnd());
+                var cyclists = JsonConvert.DeserializeObject<List<Cyclist>>(stream.ReadToEnd()) ?? new List<Cyclist>();
                 if(cyclists.Count() > 0)
                 {
-                    var emailList = cyclists.Select(c => c.Email);
-                    var emailsRepeated = emailList.Intersect(entities.Select(c => c.Email));
+                    var emailList = cyclists.Select(c => c.Email).ToList();
+                    var emailsRepeated = emailList.Intersect(entities.Select(c => c.Email).ToList()).ToList();
                     if (emailsRepeated.Count() > 0)
                         throw new Exception($"Email address in use: {emailsRepeated.First()}");
 

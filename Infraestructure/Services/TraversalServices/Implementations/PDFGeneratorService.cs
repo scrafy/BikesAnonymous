@@ -22,7 +22,7 @@ namespace TraversalServices.Implementations
 
         #region public methods
 
-        public async Task<byte[]> ObjectToPDFAsync<U>(U obj) where U : class
+        public async Task<byte[]> ObjectToPDFAsync<U>(U obj) where U : BaseEntity
         {
             var doc = new Document(PageSize.A4);
             var stream = new MemoryStream();
@@ -56,7 +56,7 @@ namespace TraversalServices.Implementations
                 if ( prop.PropertyType == typeof(DateTime))
                 {
                     table.AddCell(new PdfPCell(new Paragraph(prop.Name.ToUpper(), bold)));
-                    table.AddCell(new PdfPCell(new Paragraph(((DateTime) prop.GetValue(obj)).ToString("u", CultureInfo.CreateSpecificCulture("es-ES")), font)));
+                    table.AddCell(new PdfPCell(new Paragraph(((DateTime) prop.GetValue(obj)).ToString("0:dd/MM/yyyy H:mm:ss"), font)));
                 }
                 else
                 {

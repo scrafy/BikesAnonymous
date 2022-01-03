@@ -1,6 +1,8 @@
 ﻿using DataLayer.Interfaces;
+using Microsoft.Extensions.Options;
 using OwnerCMD.Interfaces;
 using TraversalServices.Interfaces;
+using TraversalServices.Models;
 
 namespace OwnerCMD.Implementations
 {
@@ -14,19 +16,21 @@ namespace OwnerCMD.Implementations
         private IOwnerCreateAccountCommand _ownerCreateAccountCommand;
         private IRepositoryProvider _repositoryProvider;
         private ITraversalServicesProvider _traversalServices;
+        private IOptions<TokenSettings> _tokenSettings;
 
         #endregion
 
         #region constructor
 
-        public OwnerCommandProvider(IRepositoryProvider repositoryProvider, ITraversalServicesProvider traversalServices)
+        public OwnerCommandProvider(IRepositoryProvider repositoryProvider, ITraversalServicesProvider traversalServices, IOptions<TokenSettings> tokenSettings)
         {
-            _cyclistRegisteredLastNightCommand = new CyclistRegisteredLastNightCommand(repositoryProvider.GetOwnerRepository(), repositoryProvider.GetCyclistRepository(), traversalServices.GetEmailService());
-            _loadCSVFileCommand = new LoadCSVFileCommand(repositoryProvider.GetCyclistRepository(), traversalServices.GetCyclistUsersParserService());
-            _iOwnerAuthenticateCommand = new OwnerAuthenticateCommand(repositoryProvider.GetOwnerRepository());
-            _ownerCreateAccountCommand = new OwnerCreateAccountCommand(repositoryProvider.GetOwnerRepository());
+            _cyclistRegisteredLastNightCommand = new CyclistRegisteredLastNightCommand(repositoryProvider, traversalServices);
+            _loadCSVFileCommand = new LoadCSVFileCommand(repositoryProvider, traversalServices);
+            _iOwnerAuthenticateCommand = new OwnerAuthenticateCommand(repositoryProvider, traversalServices, tokenSettings);
+            _ownerCreateAccountCommand = new OwnerCreateAccountCommand(repositoryProvider);
             _repositoryProvider = repositoryProvider;
             _traversalServices = traversalServices;
+            _tokenSettings = tokenSettings;
 
         }
 
@@ -37,7 +41,7 @@ namespace OwnerCMD.Implementations
         public ICyclistRegisteredLastNightCommand GetCyclistRegisteredLastNightCommand(bool singleton = false)
         {
             if (!singleton)
-                return new CyclistRegisteredLastNightCommand(_repositoryProvider.GetOwnerRepository(), _repositoryProvider.GetCyclistRepository(), _traversalServices.GetEmailService());
+                return new CyclistRegisteredLastNightCommand(_repositoryProvider, _traversalServices);
 
             return _cyclistRegisteredLastNightCommand;
         }
@@ -45,7 +49,7 @@ namespace OwnerCMD.Implementations
         public ILoadCSVFileCommand GetLoadCSVFileCommand(bool singleton = false)
         {
             if (!singleton)
-                return new LoadCSVFileCommand(_repositoryProvider.GetCyclistRepository(), _traversalServices.GetCyclistUsersParserService());
+                return new LoadCSVFileCommand(_repositoryProvider, _traversalServices);
 
             return _loadCSVFileCommand;
         }
@@ -53,7 +57,7 @@ namespace OwnerCMD.Implementations
         public IOwnerAuthenticateCommand GetOwnerAuthenticateCommand(bool singleton = false)
         {
             if (!singleton)
-                return new OwnerAuthenticateCommand(_repositoryProvider.GetOwnerRepository());
+                return new OwnerAuthenticateCommand(_repositoryProvider, _traversalServices, _tokenSettings);
 
             return _iOwnerAuthenticateCommand;
         }
@@ -61,7 +65,7 @@ namespace OwnerCMD.Implementations
         public IOwnerCreateAccountCommand OwnerCreateAccountCommand(bool singleton = false)
         {
             if (!singleton)
-                return new OwnerCreateAccountCommand(_repositoryProvider.GetOwnerRepository());
+                return new OwnerCreateAccountCommand(_repositoryProvider);
 
             return _ownerCreateAccountCommand;
         }

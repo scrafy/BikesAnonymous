@@ -1,11 +1,12 @@
 ﻿using Core.Entities;
 using Core.Enums;
+using Helpers;
 using System;
-using TraversalServices.Interfaces;
+
 
 namespace TraversalServices.Models
 {
-    public class CyclistDTO : IDTOToDomain<Cyclist>
+    public class CyclistDTO
     {
         #region public properties
 
@@ -31,7 +32,7 @@ namespace TraversalServices.Models
 
                          Guid.NewGuid(),
                          this.Username,
-                         this.Password,
+                         Security.GenerateMD5(this.Password),
                          this.Role,
                          this.LicenseRegistrationDate,
                          this.LicenseExpirationDate,

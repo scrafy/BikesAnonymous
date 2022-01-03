@@ -18,10 +18,10 @@ namespace OwnerCMD.Implementations
 
         #region constructor
 
-        public LoadCSVFileCommand(ICyclistRepository<Cyclist> cyclistRepository, ICSVFileParser csvFIleParser)
+        public LoadCSVFileCommand(IRepositoryProvider repositoryProvider, ITraversalServicesProvider traversalServicesProvider)
         {
-            _cyclistRepository = cyclistRepository;
-            _csvFIleParser = csvFIleParser;
+            _cyclistRepository = repositoryProvider.GetCyclistRepository();
+            _csvFIleParser = traversalServicesProvider.GetCyclistUsersParserService();
         }
 
         #endregion

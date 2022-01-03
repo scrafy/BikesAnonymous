@@ -1,17 +1,29 @@
-﻿using System;
+﻿using Core.Enums;
+using System;
 
 namespace Core.Exceptions
 {
     public abstract class BaseException : Exception
     {
-        
-        #region constructor
+        public ErrorCode ErrorCode { get; set; }
 
-        protected BaseException(string message) : base(message)
+        public BaseException(string message, ErrorCode errorCode) : base(message)
         {
-                    
+            ErrorCode = errorCode;
         }
 
-        #endregion
+        public virtual object GetServerInfoError()
+        {
+            return new
+            {
+
+                ErrorMessage = this.Message,
+                ErrorStackTrace = this.StackTrace,
+                ErrorCode = (short)this.ErrorCode
+
+            };
+        }
+
     }
+    
 }

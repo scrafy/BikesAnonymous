@@ -44,7 +44,7 @@ namespace Core.Entities
                 _validationErrors.Add("Email", "The email address has an invalid format");
 
             if (_validationErrors.Count > 0)
-                throw new ValidationEntityException("Validation Errors: It is not possible to instantiate a Owner model", _validationErrors);
+                throw new ValidationException("It was not possible to instantiate a Owner model", _validationErrors, ErrorCode.BAD_REQUEST);
         }
 
         #endregion

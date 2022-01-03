@@ -10,15 +10,15 @@ namespace DataLayer.Implementations
 
         protected virtual StreamReader GetFileStream(DB db)
         {
-            if (!File.Exists(@$"{Directory.GetCurrentDirectory()}/DataLayer/DB/{db.ToString()}.json"))
+            if (!File.Exists(@$"{Directory.GetCurrentDirectory()}/../DataAccess/DataLayer/DB/{db.ToString()}.json"))
                 CreateDB(db);
 
-            return new StreamReader(@$"{Directory.GetCurrentDirectory()}/DataLayer/DB/{db.ToString()}.json");
+            return new StreamReader(@$"{Directory.GetCurrentDirectory()}/../DataAccess/DataLayer/DB/{db.ToString()}.json");
         }
 
         protected virtual void CreateDB(DB db)
         {
-            using (var writer = new StreamWriter(@$"{Directory.GetCurrentDirectory()}/DataLayer/DB/{db.ToString()}.json", false))
+            using (var writer = new StreamWriter(@$"{Directory.GetCurrentDirectory()}/../DataAccess/DataLayer/DB/{db.ToString()}.json", false))
             {
 
             }
@@ -26,7 +26,7 @@ namespace DataLayer.Implementations
 
         protected virtual async Task WriteDataAsync(string jsonData, DB db)
         {
-            using (var writer = new StreamWriter(@$"{Directory.GetCurrentDirectory()}/DataLayer/DB/{db.ToString()}.json", false))
+            using (var writer = new StreamWriter(@$"{Directory.GetCurrentDirectory()}/../DataAccess/DataLayer/DB/{db.ToString()}.json", false))
             {
                 await writer.WriteAsync(jsonData);
 

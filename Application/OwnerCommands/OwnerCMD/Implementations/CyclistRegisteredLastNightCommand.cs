@@ -7,6 +7,7 @@ using System.Linq;
 using System;
 using TraversalServices.Models;
 using System.Text;
+using System.Collections.Generic;
 
 namespace OwnerCMD.Implementations
 {
@@ -22,27 +23,27 @@ namespace OwnerCMD.Implementations
 
         #region constructor
 
-        public CyclistRegisteredLastNightCommand(IOwnerRepository<Owner> ownerRepository, ICyclistRepository<Cyclist> cyclistRepository, IEmailService emailService)
+        public CyclistRegisteredLastNightCommand(IRepositoryProvider repositoryProvider, ITraversalServicesProvider traversalServicesProvider)
         {
-            _cyclistRepository = cyclistRepository;
-            _ownerRepository = ownerRepository;
-            _emailService = emailService;
+            _cyclistRepository = repositoryProvider.GetCyclistRepository();
+            _ownerRepository = repositoryProvider.GetOwnerRepository();
+            _emailService = traversalServicesProvider.GetEmailService();
         }
 
         #endregion
 
         #region public methods
 
-        public async Task GetCylistRegisteredLastNight()
+        public async Task GetCylistRegisteredLastNightAsync()
         {
-            var owner = (await _ownerRepository.AllAsync()).FirstOrDefault();
+            var owner = (await _ownerRepository.AllAsync())?.FirstOrDefault();
 
             if (owner == null)
                 throw new Exception("Any owner account has been registered");
 
             var start = new DateTime(DateTime.UtcNow.Ticks).Date;
             var end = new DateTime(DateTime.UtcNow.Ticks).Date.AddHours(12).AddMilliseconds(-1);
-            var cyclists = (await _cyclistRepository.AllAsync()).ToList();
+            var cyclists = (await _cyclistRepository.AllAsync())?.ToList() ?? new List<Cyclist>();
             cyclists = cyclists.Where(c => c.LicenseRegistrationDate >= start && c.LicenseRegistrationDate <= end).ToList();
             if(cyclists.Count > 0)
             {

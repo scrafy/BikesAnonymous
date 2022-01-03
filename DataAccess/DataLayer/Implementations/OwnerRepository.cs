@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using DataLayer.Enums;
+using DataLayer.Extensions;
 using DataLayer.Interfaces;
 using Helpers;
 using Newtonsoft.Json;
@@ -32,14 +33,18 @@ namespace DataLayer.Implementations
 
         public async Task<Owner> GetOwnerByUsernameAndPasswordAsync(string username, string password)
         {
-            var owners = (await AllAsync()).ToList();
-            return owners.FirstOrDefault(c => c.Username == username && c.Password == Security.GenerateMD5(password));
+            var owners = (await AllAsync())?.ToList();
+            return owners?.FirstOrDefault(c => c.Username == username && c.Password == Security.GenerateMD5(password));
         }
 
 
         public async Task SaveAsync(Owner entity)
         {
-            var owners = (await AllAsync()).ToList();
+            var owners = (await AllAsync())?.ToList() ?? null;
+
+            if (owners == null)
+                owners = new List<Owner>();
+
             if (owners.Count() > 0)
             {
                 var emailList = owners.Select(c => c.Email).ToList();
@@ -47,7 +52,7 @@ namespace DataLayer.Implementations
                     throw new Exception($"Email address in use: {entity.Email}");
             }
             owners.Add(entity);
-            await WriteDataAsync(JsonConvert.SerializeObject(owners), DB.Owner);
+            await WriteDataAsync(JsonConvert.SerializeObject(owners.Select(o => o.OwnerEntityToDBModel())), DB.Owner);
             return;
         }
 
