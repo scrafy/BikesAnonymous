@@ -109,7 +109,7 @@ namespace BikesAnonymous
                    ClockSkew = TimeSpan.Zero
                };
            });
-            
+
         }
 
         private void SetupCorsPolicy(IServiceCollection services)

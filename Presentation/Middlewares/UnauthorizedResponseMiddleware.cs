@@ -25,7 +25,9 @@ namespace BikesAnonymous.MiddleWares
 
             if ((HttpStatusCode)context.Response.StatusCode == HttpStatusCode.Unauthorized || 
                 (HttpStatusCode)context.Response.StatusCode == HttpStatusCode.NotFound || 
-                (HttpStatusCode)context.Response.StatusCode == HttpStatusCode.MethodNotAllowed)
+                (HttpStatusCode)context.Response.StatusCode == HttpStatusCode.MethodNotAllowed ||
+                (HttpStatusCode)context.Response.StatusCode == HttpStatusCode.Forbidden
+                )
             {
                 var result = new ServerResponseDTO<string>
                 {

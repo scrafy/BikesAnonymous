@@ -28,7 +28,7 @@ namespace TraversalServices.Implementations
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim("role", role.ToString())                 
+                    new Claim(ClaimTypes.Role, role.ToString())                 
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenSettings.Value.Secret)), SecurityAlgorithms.HmacSha256Signature)

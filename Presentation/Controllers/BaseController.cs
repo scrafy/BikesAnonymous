@@ -1,4 +1,4 @@
-﻿using BikesAnonymous.Attributes;
+﻿using Microsoft.AspNetCore.Authorization;
 using BikesAnonymous.Models.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,7 @@ namespace BikesAnonymous.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [JWTAuthorizeAttribute(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     
     public abstract class BaseController : ControllerBase
     {

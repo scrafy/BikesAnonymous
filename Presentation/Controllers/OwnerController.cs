@@ -23,6 +23,7 @@ namespace BikesAnonymous.Controllers
 
         [HttpPost]
         [Route("loadcsvfile")]
+        [Authorize(Roles = "OWNER")]
         public async Task<ActionResult> LoadCyclistCSVFile(IFormFile file)
         {
             if(file != null && file.Length > 0)
