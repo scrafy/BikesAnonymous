@@ -14,11 +14,8 @@ using System.Text;
 using TraversalServices.Models;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics;
-using BikesAnonymous.Models;
-using Core.Exceptions;
-using Core.Enums;
-using Newtonsoft.Json;
-using System.IO;
+using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
 
 namespace BikesAnonymous
 {
@@ -31,7 +28,7 @@ namespace BikesAnonymous
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
 
@@ -39,10 +36,11 @@ namespace BikesAnonymous
             RegisterProviderServices(services);
             JWTConfiguration(services);
             SetupCorsPolicy(services);
+            AddSwagger(services);
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseExceptionHandler(ManageException);
@@ -61,8 +59,12 @@ namespace BikesAnonymous
                 endpoints.MapControllers();
             });
 
-            //app.UseSwagger();
-          //  app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BikesAnonymous API v1.0"));
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "BikesAnonymous API V1");                
+            });
+
 
         }
 
@@ -133,6 +135,46 @@ namespace BikesAnonymous
                 var ex = context.Features.Get<IExceptionHandlerFeature>().Error;
                 new GlobalHandlerException().HandleException(ex, context);
 
+            });
+        }
+
+        private void AddSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(options =>
+            {
+                var groupName = "v1";
+
+                options.SwaggerDoc(groupName, new OpenApiInfo
+                {
+                    Title = $"Foo {groupName}",
+                    Version = groupName,
+                    Description = "Foo API",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "BikesAnonymous",
+                        Email = string.Empty,
+                        Url = new Uri("https://bikesanonymous.com/"),
+                    }
+                });
+
+                options.AddSecurityDefinition("Bearer", //Name the security scheme
+                new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme.",
+                    Type = SecuritySchemeType.Http, //We set the scheme type to http since we're using bearer authentication
+                    Scheme = "bearer" //The name of the HTTP Authorization scheme to be used in the Authorization header. In this case "bearer".
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement{
+                {
+                    new OpenApiSecurityScheme{
+                        Reference = new OpenApiReference{
+                            Id = "Bearer", //The name of the previously defined security scheme.
+                            Type = ReferenceType.SecurityScheme
+                        }
+                    },new List<string>()
+                }
+            });
             });
         }
     }
