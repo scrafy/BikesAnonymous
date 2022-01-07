@@ -1,10 +1,11 @@
 ﻿using Core.Entities;
+using Core.Enums;
+using Core.Exceptions;
 using DataLayer.Enums;
 using DataLayer.Extensions;
 using DataLayer.Interfaces;
 using Helpers;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,16 +41,19 @@ namespace DataLayer.Implementations
 
         public async Task SaveAsync(Owner entity)
         {
-            var owners = (await AllAsync())?.ToList() ?? null;
-
-            if (owners == null)
-                owners = new List<Owner>();
+            var owners = (await AllAsync())?.ToList() ?? new List<Owner>();
 
             if (owners.Count() > 0)
             {
-                var emailList = owners.Select(c => c.Email).ToList();
-                if (emailList.Exists(c => c == entity.Email))
-                    throw new Exception($"Email address in use: {entity.Email}");
+                var emailRepeated = owners.FirstOrDefault(c => c.Email == entity.Email);
+                if (emailRepeated != null)
+                    throw new GenericException($"Email address in use: {emailRepeated.Email}", ErrorCode.BAD_REQUEST);
+
+                var usernameRepeated = owners.FirstOrDefault(c => c.Username == entity.Username);
+                if (usernameRepeated != null)
+                {
+                    throw new GenericException($"The username {usernameRepeated.Username} is repeated", ErrorCode.BAD_REQUEST);
+                }
             }
             owners.Add(entity);
             await WriteDataAsync(JsonConvert.SerializeObject(owners.Select(o => o.OwnerEntityToDBModel())), DB.Owner);

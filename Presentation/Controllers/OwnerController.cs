@@ -1,7 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BikesAnonymous.Models.Common;
 using BikesAnonymous.Models.OwnerControllerModels;
+using Core.Enums;
+using Core.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,20 +31,21 @@ namespace BikesAnonymous.Controllers
             {
                 var buffer = new byte[file.Length];
                 file.OpenReadStream().Read(buffer, 0, (int)file.Length);
-                try
-                {
-                    await _ownerCommand.GetLoadCSVFileCommand().LoadCSVDataAsync(buffer);
-                    return StatusCode(500, "OK");
+                await _ownerCommand.GetLoadCSVFileCommand().LoadCSVDataAsync(buffer);
+                return Ok(WrapResponse<string>(null, null));
 
-                }
-                catch(Exception ex)
-                {
-                    return StatusCode(500, ex.Message);
-                }
-               
             }
-            return StatusCode(500, "badfile");
+            throw new GenericException("File corrupted", ErrorCode.BAD_REQUEST);
 
+        }
+
+        [HttpGet]
+        [Route("getreport")]
+        [Authorize(Roles = "OWNER")]
+        public async Task<ActionResult> GetReport()
+        {
+            _ownerCommand.GetCyclistRegisteredLastNightCommand().GetCylistRegisteredLastNightAsync();
+            return Ok(WrapResponse<string>(null, null));
         }
 
         [HttpPost]

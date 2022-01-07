@@ -3,19 +3,25 @@ using Helpers;
 
 namespace DataLayer.Extensions
 {
-    public static class OwnerEntityExtensions
+    public static class CyclistEntityExtensions
     {
         #region public static methods
 
-        public static object OwnerEntityToDBModel(this Owner owner)
+        public static object CyclistEntityToDBModel(this Cyclist cyclist)
         {
             return new
             {
-                owner.Id,
-                owner.Email,
-                owner.Username,
-                Password = Security.GenerateMD5(owner.Password),
-                owner.Role                
+                cyclist.Id,
+                cyclist.Email,
+                cyclist.Username,
+                Password = Security.GenerateMD5(cyclist.Password),
+                cyclist.Role,
+                cyclist.Age,
+                cyclist.FirstName,
+                cyclist.LastName,
+                cyclist.LicenseCode,
+                cyclist.LicenseExpirationDate,
+                cyclist.LicenseRegistrationDate               
 
             };
         }

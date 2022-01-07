@@ -32,7 +32,7 @@ namespace TraversalServices.Models
 
                          Guid.NewGuid(),
                          this.Username,
-                         Security.GenerateMD5(this.Password),
+                         this.Password,
                          this.Role,
                          this.LicenseRegistrationDate,
                          this.LicenseExpirationDate,

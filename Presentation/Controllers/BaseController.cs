@@ -2,7 +2,11 @@
 using BikesAnonymous.Models.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-
+using Core.Exceptions;
+using Core.Enums;
+using System.Security.Claims;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BikesAnonymous.Controllers
 {
@@ -25,6 +29,15 @@ namespace BikesAnonymous.Controllers
                 },
                 ServerError = null
             };
+        }
+
+        protected virtual string GetClaimFromJWTToken(string claim)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null)
+                return identity.Claims.FirstOrDefault(c => c.Type == claim)?.Value;
+
+            return null;
         }
 
     }

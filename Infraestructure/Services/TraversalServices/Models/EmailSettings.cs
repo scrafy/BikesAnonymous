@@ -2,7 +2,7 @@
 
 namespace TraversalServices.Models
 {
-    public class EmailSetting
+    public class EmailSettings
     {
         public string[] To { get; set; }
 

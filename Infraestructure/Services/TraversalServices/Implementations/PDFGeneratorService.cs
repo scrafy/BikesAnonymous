@@ -2,7 +2,6 @@
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
-using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -56,7 +55,7 @@ namespace TraversalServices.Implementations
                 if ( prop.PropertyType == typeof(DateTime))
                 {
                     table.AddCell(new PdfPCell(new Paragraph(prop.Name.ToUpper(), bold)));
-                    table.AddCell(new PdfPCell(new Paragraph(((DateTime) prop.GetValue(obj)).ToString("0:dd/MM/yyyy H:mm:ss"), font)));
+                    table.AddCell(new PdfPCell(new Paragraph(((DateTime) prop.GetValue(obj)).ToString("dd/MM/yyyy H:mm:ss"), font)));
                 }
                 else
                 {

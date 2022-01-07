@@ -1,5 +1,4 @@
-﻿using Core.Entities;
-using DataLayer.Interfaces;
+﻿using DataLayer.Interfaces;
 using OwnerCMD.Interfaces;
 using System;
 using System.Threading.Tasks;
@@ -11,8 +10,8 @@ namespace CyclistCMD.Implementations
     {
         #region private properties
 
-        private ICyclistRepository<Cyclist> _cyclistRepository;
-        private IPDFGeneratorService _pdfGeneratorService;
+        private IRepositoryProvider _repositoryProvider;
+        private ITraversalServicesProvider _traversalServicesProvider;
 
         #endregion
 
@@ -20,8 +19,8 @@ namespace CyclistCMD.Implementations
 
         public PrintLicenseCommand(IRepositoryProvider repositoryProvider, ITraversalServicesProvider traversalServicesProvider)
         {
-            _cyclistRepository = repositoryProvider.GetCyclistRepository();
-            _pdfGeneratorService = traversalServicesProvider.GetPDFGeneratorService();
+            _repositoryProvider = repositoryProvider;
+            _traversalServicesProvider = traversalServicesProvider;
         }
 
         #endregion
@@ -31,8 +30,8 @@ namespace CyclistCMD.Implementations
 
         public async Task<byte[]> PrintLicenseAsync(Guid cyclistId)
         {
-            var cyclist = await _cyclistRepository.GetAsync(cyclistId) ?? throw new Exception("Cyclist not found");
-            return await _pdfGeneratorService.ObjectToPDFAsync(cyclist);
+            var cyclist = await _repositoryProvider.GetCyclistRepository().GetAsync(cyclistId) ?? throw new Exception("Cyclist not found");
+            return await _traversalServicesProvider.GetPDFGeneratorService().ObjectToPDFAsync(cyclist);
 
 
         }

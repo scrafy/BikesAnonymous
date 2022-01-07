@@ -1,5 +1,4 @@
-﻿
-namespace BikesAnonymous.Models.Common
+﻿namespace BikesAnonymous.Models.Common
 {
     public class ServerDataDTO<T> where T : class
     {   

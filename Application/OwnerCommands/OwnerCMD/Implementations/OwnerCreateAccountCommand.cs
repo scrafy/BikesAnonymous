@@ -9,7 +9,7 @@ namespace OwnerCMD.Implementations
     {
         #region private properties
 
-        private IOwnerRepository<Owner> _ownerRepository;
+        private IRepositoryProvider _repositoryProvider;
 
         #endregion
 
@@ -17,7 +17,7 @@ namespace OwnerCMD.Implementations
 
         public OwnerCreateAccountCommand(IRepositoryProvider repositoryProvider)
         {
-            _ownerRepository = repositoryProvider.GetOwnerRepository();            
+            _repositoryProvider = repositoryProvider;
         }
 
         #endregion
@@ -26,7 +26,7 @@ namespace OwnerCMD.Implementations
 
         public async Task CreateAccountAsync(Owner owner)
         {
-            await _ownerRepository.SaveAsync(owner);
+            await _repositoryProvider.GetOwnerRepository().SaveAsync(owner);
             
         }
 

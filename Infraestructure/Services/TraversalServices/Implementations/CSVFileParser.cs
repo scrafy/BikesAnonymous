@@ -8,8 +8,8 @@ using TraversalServices.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper.Configuration;
-using CsvHelper.TypeConversion;
-using System;
+using Core.Exceptions;
+using Core.Enums;
 
 namespace TraversalServices.Implementations
 {
@@ -25,7 +25,6 @@ namespace TraversalServices.Implementations
 
         public CSVFileParser()
         {
-            //TO-DO read from appsettings.json
             _csvConfiguration = new CsvConfiguration(CultureInfo.CurrentCulture)
             {
                 Delimiter = ",",
@@ -34,7 +33,7 @@ namespace TraversalServices.Implementations
             };
             _csvConfiguration.ReadingExceptionOccurred = (ex) =>
             {
-                throw ex.Exception;
+                throw new GenericException("CSV file invalid", ErrorCode.BAD_REQUEST);
             };
         }
 
@@ -47,10 +46,12 @@ namespace TraversalServices.Implementations
         {
             using (var reader = new StreamReader(new MemoryStream(csvUsersFile)))
             {
+                reader.BaseStream.Position = 0;
                 using (var csv = new CsvReader(reader, _csvConfiguration))
                 {
                     var task = Task.Factory.StartNew(() => csv.GetRecords<CyclistDTO>());
-                    return (await task).ToList().Select(obj => obj.ToDomain());                    
+                    var cyclist = (await task).ToList();
+                    return cyclist.Select(obj => obj.ToDomain());                    
                 }
             }
             

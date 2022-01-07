@@ -1,7 +1,4 @@
-﻿using Core.Exceptions;
-
-
-namespace BikesAnonymous.Models.Common
+﻿namespace BikesAnonymous.Models.Common
 {
     public class ServerResponseDTO<T> where T : class
     {

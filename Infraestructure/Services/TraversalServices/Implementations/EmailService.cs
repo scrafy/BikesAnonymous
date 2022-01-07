@@ -5,6 +5,7 @@ using TraversalServices.Models;
 using System.Linq;
 using System.IO;
 using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
 
 namespace TraversalServices.Implementations
 {
@@ -16,8 +17,7 @@ namespace TraversalServices.Implementations
         private short _smtpPort;
         private string _fromAddress;
         private string _fromPassword;
-        private string _ownerEmail;
-
+        
         #endregion
              
 
@@ -35,7 +35,7 @@ namespace TraversalServices.Implementations
 
         #region public methods
 
-        public async void SendEmailAsync(EmailSetting settings)
+        public async Task SendEmailAsync(EmailSettings settings)
         {
             GetSmtpClient().SendAsync(GetMailMessage(settings), new { });
         }
@@ -57,7 +57,7 @@ namespace TraversalServices.Implementations
             };
         }
 
-        private MailMessage GetMailMessage(EmailSetting settings)
+        private MailMessage GetMailMessage(EmailSettings settings)
         {
             var message = new MailMessage()
             {
@@ -67,7 +67,7 @@ namespace TraversalServices.Implementations
                 IsBodyHtml = false
             };
             message.To.Add(string.Join(",", settings.To));
-            settings.Attachments.ToList().ForEach(att => message.Attachments.Add(new Attachment(new MemoryStream(att.Value), att.Key)));
+            settings.Attachments?.ToList()?.ForEach(att => message.Attachments.Add(new Attachment(new MemoryStream(att.Value), att.Key)));
             return message;
         }
 

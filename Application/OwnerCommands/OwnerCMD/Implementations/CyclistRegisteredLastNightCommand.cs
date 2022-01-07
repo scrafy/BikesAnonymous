@@ -1,13 +1,13 @@
 ﻿using Core.Entities;
 using DataLayer.Interfaces;
 using OwnerCMD.Interfaces;
-using System.Threading.Tasks;
 using TraversalServices.Interfaces;
 using System.Linq;
 using System;
-using TraversalServices.Models;
 using System.Text;
 using System.Collections.Generic;
+using TraversalServices.Models;
+using System.Threading.Tasks;
 
 namespace OwnerCMD.Implementations
 {
@@ -15,9 +15,8 @@ namespace OwnerCMD.Implementations
     {
         #region private properties
 
-        private ICyclistRepository<Cyclist> _cyclistRepository;
-        private IOwnerRepository<Owner> _ownerRepository;
-        private IEmailService _emailService;
+        private IRepositoryProvider _repositoryProvider;
+        private ITraversalServicesProvider _traversalServicesProvider;
 
         #endregion
 
@@ -25,9 +24,8 @@ namespace OwnerCMD.Implementations
 
         public CyclistRegisteredLastNightCommand(IRepositoryProvider repositoryProvider, ITraversalServicesProvider traversalServicesProvider)
         {
-            _cyclistRepository = repositoryProvider.GetCyclistRepository();
-            _ownerRepository = repositoryProvider.GetOwnerRepository();
-            _emailService = traversalServicesProvider.GetEmailService();
+            _traversalServicesProvider = traversalServicesProvider;
+            _repositoryProvider = repositoryProvider;
         }
 
         #endregion
@@ -36,30 +34,36 @@ namespace OwnerCMD.Implementations
 
         public async Task GetCylistRegisteredLastNightAsync()
         {
-            var owner = (await _ownerRepository.AllAsync())?.FirstOrDefault();
+            var owner = (await _repositoryProvider.GetOwnerRepository().AllAsync())?.FirstOrDefault();
 
             if (owner == null)
                 throw new Exception("Any owner account has been registered");
 
             var start = new DateTime(DateTime.UtcNow.Ticks).Date;
             var end = new DateTime(DateTime.UtcNow.Ticks).Date.AddHours(12).AddMilliseconds(-1);
-            var cyclists = (await _cyclistRepository.AllAsync())?.ToList() ?? new List<Cyclist>();
+            var cyclists = (await _repositoryProvider.GetCyclistRepository().AllAsync())?.ToList() ?? new List<Cyclist>();
             cyclists = cyclists.Where(c => c.LicenseRegistrationDate >= start && c.LicenseRegistrationDate <= end).ToList();
             if(cyclists.Count > 0)
             {
-                var body = new StringBuilder();
-
-                cyclists.ForEach(c => body.AppendLine($"{c.FirstName} {c.LastName} --> {c.LicenseCode}"));
-                body.AppendLine($"A total of {cyclists.Count()} cyclist/cylists have been registered last night");
-                _emailService.SendEmailAsync(new EmailSetting() {
-                    
-                    To = new string[] { owner.Email },
-                    Subject = "Cyclist resgitered last night report",
-                    Body = body.ToString(),
-                                    
-                });
+                SendReport(cyclists, owner.Email);
             }
 
+        }
+
+        private async Task SendReport(IEnumerable<Cyclist> cyclists, string ownerEmail)
+        {
+            var body = new StringBuilder();
+
+            cyclists.ToList().ForEach(c => body.AppendLine($"{c.FirstName} {c.LastName} --> {c.LicenseCode}"));
+            body.AppendLine($"\n\nA total of {cyclists.Count()} cyclist/cylists have been registered last night");
+            _traversalServicesProvider.GetEmailService().SendEmailAsync(new EmailSettings()
+            {
+
+                To = new string[] { ownerEmail },
+                Subject = "Cyclist resgitered last night report",
+                Body = body.ToString(),
+
+            });
         }
 
         #endregion

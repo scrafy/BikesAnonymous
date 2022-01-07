@@ -1,8 +1,12 @@
-﻿using Core.Entities;
+﻿using Core.Enums;
+using Core.Exceptions;
 using DataLayer.Interfaces;
+using Microsoft.Extensions.Options;
 using OwnerCMD.Interfaces;
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using TraversalServices.Interfaces;
+using TraversalServices.Models;
 
 namespace CyclistCMD.Implementations
 {
@@ -10,15 +14,20 @@ namespace CyclistCMD.Implementations
     {
         #region private properties
 
-        private ICyclistRepository<Cyclist> _cyclistRepository;
-        
+        private IRepositoryProvider _repositoryProvider;
+        private ITraversalServicesProvider _traversalServicesProvider;
+        private IOptions<TokenSettings> _tokenSettings;
+
+
         #endregion
 
         #region constructor
 
-        public CyclistAuthenticateCommand(IRepositoryProvider repositoryProvider)
+        public CyclistAuthenticateCommand(IRepositoryProvider repositoryProvider, ITraversalServicesProvider traversalServicesProvider, IOptions<TokenSettings> tokenSettings)
         {
-            _cyclistRepository = repositoryProvider.GetCyclistRepository();           
+            _repositoryProvider = repositoryProvider;
+            _traversalServicesProvider = traversalServicesProvider;
+            _tokenSettings = tokenSettings;
         }
 
         #endregion
@@ -28,9 +37,11 @@ namespace CyclistCMD.Implementations
 
         public async Task<string> AuthenticateAsync(string username, string password)
         {
-            var cyclist = await _cyclistRepository.GetCyclistByUsernameAndPasswordAsync(username, password) ?? throw new Exception("Cyclist not found");
-            //TO-DO token generation
-            return "";
+            var cyclist = await _repositoryProvider.GetCyclistRepository().GetCyclistByUsernameAndPasswordAsync(username, password) ?? throw new GenericException("Cyclist not found", ErrorCode.NOT_FOUND);
+            var claims = new Dictionary<string, string>();
+            claims.Add("role", ROLE.CYCLIST.ToString());
+            claims.Add("Id", cyclist.Id.ToString());
+            return _traversalServicesProvider.GetTokenGeneratorService().CreateToken(_tokenSettings.Value.Secret, claims);
 
         }
 

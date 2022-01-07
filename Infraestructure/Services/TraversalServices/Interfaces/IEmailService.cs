@@ -1,10 +1,11 @@
-﻿using TraversalServices.Models;
+﻿using System.Threading.Tasks;
+using TraversalServices.Models;
 
 namespace TraversalServices.Interfaces
 {
     public interface IEmailService
     {
-        void SendEmailAsync(EmailSetting settings);
+        Task SendEmailAsync(EmailSettings settings);
         
     }
 }
