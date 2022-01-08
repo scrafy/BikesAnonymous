@@ -21,15 +21,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccess", "DataAccess", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataAccess\DataLayer\DataLayer.csproj", "{4BD5628A-8D63-4001-9DBC-ED0754E97128}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Infraestructure\Common\Helpers\Helpers.csproj", "{9E3E097C-7A0D-436B-89E8-D45398DBE281}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers", "Infraestructure\Common\Helpers\Helpers.csproj", "{9E3E097C-7A0D-436B-89E8-D45398DBE281}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CyclistCommands", "CyclistCommands", "{8D4E5851-A0EA-477A-B3E8-815739AFED87}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OwnerCommands", "OwnerCommands", "{34F21901-C0A5-4264-963B-B5FAF0C62E04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CyclistCMD", "Application\CyclistCommands\CyclistCMD\CyclistCMD.csproj", "{5554329D-33F3-464A-8309-72B7F25E9CA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CyclistCMD", "Application\CyclistCommands\CyclistCMD\CyclistCMD.csproj", "{5554329D-33F3-464A-8309-72B7F25E9CA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwnerCMD", "Application\OwnerCommands\OwnerCMD\OwnerCMD.csproj", "{B21545F9-B898-4397-A4ED-F5AB5162643C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OwnerCMD", "Application\OwnerCommands\OwnerCMD\OwnerCMD.csproj", "{B21545F9-B898-4397-A4ED-F5AB5162643C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{56772EA3-0812-4444-A4F6-E940759513C0}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.md = Readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
