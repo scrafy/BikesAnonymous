@@ -95,7 +95,7 @@ After that, if you want to execute the application, click on the green play butt
 <br>
 <br>
 
-### <a name="desc"></a>
+### <a name="invoke"></a>
 
 ### 4. Invoking methods using swagger UI
 
@@ -103,12 +103,14 @@ After that, if you want to execute the application, click on the green play butt
 Invoking methods using Swagger interface is very easy. The first thing you have to do it´s to create your owner account, for this, you have to select the action /api/owner and fill the data.<br>
 Once you have created your owner account, you will be able to do login invoking api/owner/authenticate action using your credentials and you will get a session token.<br>
 Then, copy this token from the response section and paste it on authorize screen.<br>
+<br>
 
 ![Alt text!](./readmeimages/swagger2.png)
 
 After that, you will be able to invoke all owner´s action (not cyclist´s actions) because the session token defines which rol can execute a concrete action on controllers.<br>
 The next step would be to load csv file with the cyclist accounts.<br>
 Try your csv is equal showned here else, the parser will throw an exception.<br>
+<br>
 
 ![Alt text!](./readmeimages/csv.png)
 
