@@ -148,7 +148,7 @@ namespace BikesAnonymous
                 {
                     Title = $"Foo {groupName}",
                     Version = groupName,
-                    Description = "Foo API",
+                    Description = "BikesAnonymous API",
                     Contact = new OpenApiContact
                     {
                         Name = "BikesAnonymous",
