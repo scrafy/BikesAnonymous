@@ -100,7 +100,18 @@ After that, if you want to execute the application, click on the green play butt
 ### 4. Invoking methods using swagger UI
 
 <br>
-Invoking methods using Swagger interfaces is very easy. The first thing you have to decide is if you want to invoke either owner큦 methods or cyclist큦 methods beacuse depending of this, you will have to use one authentication method or another one
-<br>
+Invoking methods using Swagger interface is very easy. The first thing you have to do it큦 to create your owner account, for this, you have to select the action /api/owner and fill the data.<br>
+Once you have created your owner account, you will be able to do login invoking api/owner/authenticate action using your credentials and you will get a session token.<br>
+Then, copy this token from the response section and paste it on authorize screen.<br>
 
-![Alt text!](./readmeimages/swagger1.png)
+![Alt text!](./readmeimages/swagger2.png)
+
+After that, you will be able to invoke all owner큦 action (not cyclist큦 actions) because the session token defines which rol can execute a concrete action on controllers.<br>
+The next step would be to load csv file with the cyclist accounts.<br>
+Try your csv is equal showned here else, the parser will throw an exception.<br>
+
+![Alt text!](./readmeimages/csv.png)
+
+Once, the cyclist account have been created, they will get theirs licenses by email and any cyclist loaded will be able to do login in the application.<br>
+For that, make login with one of cyclist큦 account, copy the session token, go to the authorize green button on top and paste it.<br>
+Then, call api/cyclist/printlincense and swagger will show you a link to download your license document.
