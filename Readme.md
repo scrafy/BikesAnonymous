@@ -1,6 +1,6 @@
 # BikesAnonymous
 
-![Alt text](./Infraestructure/Services/TraversalServices/Resources/logo.png =400x164)
+![Alt text](./logo.png)
 
 1. Proyect description
 2. Layers description
