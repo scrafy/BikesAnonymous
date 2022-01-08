@@ -79,3 +79,28 @@ This application has been programmed trying to respect SOLID principles.</p>
   With this we ensure that spurious data does not enter our system.<br>
   If, for example, it were necessary to perform a read operation through a specific command to return a data model that is not representable through our domain models, our command could simply read through the repository layer the entities we need and then perform a data projection to adapt the output to what the presentation layer needs.<br>
   This is known as DTO data models (data transfer objects).</p>
+<br>
+<br>
+
+### <a name="start"></a>
+
+### 3. How to start the application
+
+<br>
+
+First of all you have to have [Visual Studio](https://visualstudio.microsoft.com/es/thank-you-downloading-visual-studio/?sku=Community&rel=17) IDE installed in your computer, then, once you have done it, you have to clone the project from [here](https://github.com/scrafy/BikesAnonymous.git).
+
+Go to the project folder a double click on BikesAnonymous.sln solution file and the project will be opened in Visual Studio.
+After that, if you want to execute the application, click on the green play button which is placed on top of the IDE´s window and a swagger interface will be showned automatically in order to you can invoke the backend methods and enjoy with this wonderfull application :)
+<br>
+<br>
+
+### <a name="desc"></a>
+
+### 4. Invoking methods using swagger UI
+
+<br>
+Invoking methods using Swagger interfaces is very easy. The first thing you have to decide is if you want to invoke either owner´s methods or cyclist´s methods beacuse depending of this, you will have to use one authentication method or another one
+<br>
+
+![Alt text!](./readmeimages/swagger1.png)
