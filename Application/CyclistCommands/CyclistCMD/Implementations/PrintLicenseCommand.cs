@@ -1,4 +1,6 @@
-﻿using DataLayer.Interfaces;
+﻿using Core.Enums;
+using Core.Exceptions;
+using DataLayer.Interfaces;
 using OwnerCMD.Interfaces;
 using System;
 using System.Threading.Tasks;
@@ -30,7 +32,7 @@ namespace CyclistCMD.Implementations
 
         public async Task<byte[]> PrintLicenseAsync(Guid cyclistId)
         {
-            var cyclist = await _repositoryProvider.GetCyclistRepository().GetAsync(cyclistId) ?? throw new Exception("Cyclist not found");
+            var cyclist = await _repositoryProvider.GetCyclistRepository().GetAsync(cyclistId) ?? throw new GenericException("Cyclist not found", ErrorCode.NOT_FOUND);
             return await _traversalServicesProvider.GetPDFGeneratorService().ObjectToPDFAsync(cyclist);
 
 

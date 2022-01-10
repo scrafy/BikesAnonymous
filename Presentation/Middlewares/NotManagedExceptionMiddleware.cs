@@ -1,5 +1,4 @@
-﻿using BikesAnonymous.Models;
-using BikesAnonymous.Models.Common;
+﻿using BikesAnonymous.Models.Common;
 using Core.Enums;
 using Core.Exceptions;
 using Microsoft.AspNetCore.Http;
@@ -9,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace BikesAnonymous.MiddleWares
 {
-    public class UnauthorizedResponseMiddleware
+    public class NotManagedExceptionMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public UnauthorizedResponseMiddleware(RequestDelegate next)
+        public NotManagedExceptionMiddleware(RequestDelegate next)
         {
             _next = next;
         }
@@ -21,12 +20,14 @@ namespace BikesAnonymous.MiddleWares
         public async Task InvokeAsync(HttpContext context)
         {
 
+            
             await _next(context);
 
             if ((HttpStatusCode)context.Response.StatusCode == HttpStatusCode.Unauthorized || 
                 (HttpStatusCode)context.Response.StatusCode == HttpStatusCode.NotFound || 
                 (HttpStatusCode)context.Response.StatusCode == HttpStatusCode.MethodNotAllowed ||
-                (HttpStatusCode)context.Response.StatusCode == HttpStatusCode.Forbidden
+                (HttpStatusCode)context.Response.StatusCode == HttpStatusCode.Forbidden ||
+                (HttpStatusCode)context.Response.StatusCode == HttpStatusCode.BadRequest
                 )
             {
                 var result = new ServerResponseDTO<string>

@@ -70,7 +70,7 @@ namespace BikesAnonymous
 
         private void registerMiddleWares(IApplicationBuilder app)
         {
-            app.UseMiddleware<UnauthorizedResponseMiddleware>();
+            app.UseMiddleware<NotManagedExceptionMiddleware>();
         }
 
         private void RegisterProviderServices(IServiceCollection services)
@@ -146,7 +146,7 @@ namespace BikesAnonymous
 
                 options.SwaggerDoc(groupName, new OpenApiInfo
                 {
-                    Title = $"Foo {groupName}",
+                    Title = "BikesAnonymous",
                     Version = groupName,
                     Description = "BikesAnonymous API",
                     Contact = new OpenApiContact
@@ -157,19 +157,19 @@ namespace BikesAnonymous
                     }
                 });
 
-                options.AddSecurityDefinition("Bearer", //Name the security scheme
+                options.AddSecurityDefinition("Bearer", 
                 new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme.",
-                    Type = SecuritySchemeType.Http, //We set the scheme type to http since we're using bearer authentication
-                    Scheme = "bearer" //The name of the HTTP Authorization scheme to be used in the Authorization header. In this case "bearer".
+                    Type = SecuritySchemeType.Http, 
+                    Scheme = "bearer" 
                 });
 
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement{
                 {
                     new OpenApiSecurityScheme{
                         Reference = new OpenApiReference{
-                            Id = "Bearer", //The name of the previously defined security scheme.
+                            Id = "Bearer", 
                             Type = ReferenceType.SecurityScheme
                         }
                     },new List<string>()

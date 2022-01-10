@@ -8,6 +8,8 @@ using System.Text;
 using System.Collections.Generic;
 using TraversalServices.Models;
 using System.Threading.Tasks;
+using Core.Exceptions;
+using Core.Enums;
 
 namespace OwnerCMD.Implementations
 {
@@ -37,7 +39,7 @@ namespace OwnerCMD.Implementations
             var owner = (await _repositoryProvider.GetOwnerRepository().AllAsync())?.FirstOrDefault();
 
             if (owner == null)
-                throw new Exception("Any owner account has been registered");
+                throw new GenericException("Any owner account has been registered", ErrorCode.NOT_FOUND);
 
             var start = new DateTime(DateTime.UtcNow.Ticks).Date;
             var end = new DateTime(DateTime.UtcNow.Ticks).Date.AddHours(12).AddMilliseconds(-1);
